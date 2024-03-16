@@ -13,7 +13,7 @@ namespace ExamApp
         //public event MessageDelegate Notify;
 
 
-        public event EventHandler<ExamEventArgs> NotifyHandler;
+        public event EventHandler<ExamEventArgs> ResultControled;
 
         public void ControlExam(Exam exam)
         {
@@ -22,15 +22,15 @@ namespace ExamApp
 
             Console.WriteLine($"{exam.Name} result is ready ");
 
-            FinishOperation(exam);
+            OnResultControled(exam);
         }
 
-        public void FinishOperation(Exam exam)
+        public void OnResultControled(Exam exam)
         {
 
-            if (NotifyHandler != null)
+            if (ResultControled != null)
             {
-                NotifyHandler.Invoke(this, new ExamEventArgs
+                ResultControled.Invoke(this, new ExamEventArgs
                 {
                     Exam = exam
                 });

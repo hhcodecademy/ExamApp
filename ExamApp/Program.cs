@@ -8,18 +8,37 @@
             Exam exam = new Exam();
             exam.Name = "IELTS";
             exam.Result = 8;
-
-            MessageService messageService = new MessageService();
-            TelegramService telegramService = new TelegramService();
-            MailService mailService = new MailService();
+                           
+      
             ExamOperation examOperation = new ExamOperation();
-            examOperation.NotifyHandler += messageService.SendMessage;
-            examOperation.NotifyHandler += mailService.SendMail;
-            examOperation.NotifyHandler += telegramService.SendMessage;
-            examOperation.NotifyHandler -= mailService.SendMail;
+            examOperation.ResultControled += Mail_ResultControled;
+            examOperation.ResultControled += Message_ResultControled;
+            examOperation.ResultControled += Telegram_ResultControled;
+
+            //examOperation.ResultControled += messageService.SendMessage;
+            //examOperation.ResultControled += mailService.SendMail;
+            //examOperation.ResultControled += telegramService.SendMessage;
             examOperation.ControlExam(exam);
 
 
+        }
+
+        private static void Telegram_ResultControled(object? sender, ExamEventArgs e)
+        {
+            TelegramService telegramService = new TelegramService();
+            telegramService.SendMessage(sender, e);
+        }
+
+        private static void Message_ResultControled(object? sender, ExamEventArgs e)
+        {
+            MessageService messageService = new MessageService();
+            messageService.SendMessage(messageService, e);
+        }
+
+        private static void Mail_ResultControled(object? sender, ExamEventArgs e)
+        {
+            MailService mailService = new MailService();
+            mailService.SendMail(sender, e);
         }
     }
 }
